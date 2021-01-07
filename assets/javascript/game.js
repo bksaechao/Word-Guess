@@ -1,12 +1,11 @@
 var mysteryWord = document.getElementById("mystery-word");
 var userGuesses = document.getElementById("user-guesses");
-var randomWord = "JUNGLE";
-var userGuessArray = [];
 var remainingGuesses = document.getElementById("remaining-guesses");
+var userGuessArray = [];
+var alphabet = "abcdefghijklmnopqrstuvwxyz".toUpperCase();
+var randomWord = "JUNGLE";
 
 let guessesLeft = randomWord.length;
-
-
 remainingGuesses.innerText = guessesLeft;
 
 function recordGuess() {
@@ -32,12 +31,16 @@ function addCorrectLetter() {
 
 document.onkeyup = function (event) {
     userInput = event.key.toUpperCase();
-    guessesLeft--;
-    if (guessesLeft > 0) {
-        addCorrectLetter();
-        recordGuess();
-        updateScore();
+
+    if (alphabet.includes(userInput)) {
+        if (guessesLeft > 0) {
+            addCorrectLetter();
+            recordGuess();
+            updateScore();
+        } else {
+            gameOver();
+        }
     } else {
-        gameOver();
+        console.log("WRONG INPUT!")
     }
 }
