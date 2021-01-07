@@ -24,3 +24,7 @@ body {
     border: 2px solid #ddd;
     padding: 20px;
 }
+
+#remaining-guesses {
+    font-size: 1.875rem;
+}
