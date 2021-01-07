@@ -1,0 +1,26 @@
+html {
+    font-size: 100%;
+    box-sizing: border-box;
+}
+
+body {
+    text-align: center;
+}
+
+.wrapper {
+    max-width: 960px;
+    margin: 0 auto;
+}
+
+.game-content {
+    border: 10px outset rgb(85, 109, 133);
+    padding: 30px; 
+}
+
+#mystery-word {
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-weight: 700;
+    font-size: 1.562rem;
+    border: 2px solid #ddd;
+    padding: 20px;
+}
