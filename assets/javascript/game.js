@@ -14,14 +14,17 @@ function pickSecretWord() {
     console.log(secretWord);
 }
 
-function recordGuess() {
-    for (i = 0; i < userGuessArray.length; i++) {
-        if (userInput === userGuessArray[i]) {
-            alert("you already guessed that letter!")
+function checkGuess() {
+    if (userGuessArray.indexOf(userInput) === -1 && mysteryWord.innerText.indexOf(userInput) === -1) {
+        if (secretWord.includes(userInput)){
+            mysteryWord.append(userInput);
+            console.log(mysteryWord);
         } else {
             userGuessArray.push(userInput);
-            updateScore();
+            userGuesses.innerText = userGuessArray;
         }
+    } else {
+        console.log("YOU ALREADY PICKED THAT LETTER")
     }
 }
 
@@ -31,6 +34,8 @@ function updateScore() {
         remainingGuesses.innerText = "Game Over!"
     }
 }
+
+
 
 // function checkLetter() {
 //     // if the user input matches a letter in the secret word
@@ -55,7 +60,7 @@ document.onkeyup = function (event) {
     if (alphabet.includes(userInput)) {
         //if the guessesLeft are above 0 this code will run
         if (guessesLeft > 0) {
-            recordGuess();
+            checkGuess();
             // checkLetter();
             // checkDuplicate();
         } else { }
