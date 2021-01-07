@@ -1,12 +1,18 @@
 var mysteryWord = document.getElementById("mystery-word");
 var userGuesses = document.getElementById("user-guesses");
 var remainingGuesses = document.getElementById("remaining-guesses");
+var secretWordArray = ["BLEACH", "NARUTO", "SUNSHINE", "NOBLESSE", "GENSHIN IMPACT"]
 var userGuessArray = [];
 var alphabet = "abcdefghijklmnopqrstuvwxyz".toUpperCase();
-var randomWord = "JUNGLE";
+var secretWord 
 
-let guessesLeft = randomWord.length;
-remainingGuesses.innerText = guessesLeft;
+let guessesLeft = 0
+
+function pickWord() {
+    var randomWord = secretWordArray[Math.floor(Math.random()*secretWordArray.length)]
+    secretWord = randomWord
+    console.log(secretWord);
+}
 
 function recordGuess() {
     userGuessArray.push(userInput);
@@ -22,14 +28,17 @@ function gameOver() {
 }
 
 function addCorrectLetter() {
-    for (let i = 0; i < randomWord.length; i++) {
-        if (userInput === randomWord[i]) {
+    for (let i = 0; i < secretWord.length; i++) {
+        if (userInput === secretWord[i]) {
             mysteryWord.append(userInput);
         }
     }
 }
 
 document.onkeyup = function (event) {
+    pickWord();
+    guessesLeft = secretWord.length;
+    remainingGuesses.innerText = guessesLeft;
     userInput = event.key.toUpperCase();
 
     if (alphabet.includes(userInput)) {
@@ -41,6 +50,6 @@ document.onkeyup = function (event) {
             gameOver();
         }
     } else {
-        console.log("WRONG INPUT!")
+        console.log(userInput + " IS A WRONG INPUT!")
     }
 }
