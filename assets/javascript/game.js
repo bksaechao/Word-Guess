@@ -28,26 +28,24 @@ function gameOver() {
 }
 
 function addCorrectLetter() {
-    for (let i = 0; i < secretWord.length; i++) {
-        if (userInput === secretWord[i]) {
+        if (secretWord.includes(userInput)) {
             mysteryWord.append(userInput);
         }
-    }
 }
 
+pickWord();
 document.onkeyup = function (event) {
-    pickWord();
     guessesLeft = secretWord.length;
-    remainingGuesses.innerText = guessesLeft;
+    updateScore();
     userInput = event.key.toUpperCase();
 
     if (alphabet.includes(userInput)) {
         if (guessesLeft > 0) {
             addCorrectLetter();
             recordGuess();
-            updateScore();
         } else {
-            gameOver();
+            guessesLeft--;
+            updateScore();
         }
     } else {
         console.log(userInput + " IS A WRONG INPUT!")
