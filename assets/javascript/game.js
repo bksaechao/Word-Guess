@@ -15,33 +15,35 @@ function pickSecretWord() {
 }
 
 function recordGuess() {
-    userGuessArray.push(userInput);
-    userGuesses.innerText = userGuessArray;
+    for (i = 0; i < userGuessArray.length; i++) {
+        if (userInput === userGuessArray[i]) {
+            alert("you already guessed that letter!")
+        } else {
+            userGuessArray.push(userInput);
+            updateScore();
+        }
+    }
 }
 
 function updateScore() {
-    remainingGuesses.innerText = guessesLeft;
+    remainingGuesses.innerText = "Guesses Left: " + guessesLeft;
     if (guessesLeft === 0) {
-        gameOver();
+        remainingGuesses.innerText = "Game Over!"
     }
 }
 
-function gameOver() {
-    remainingGuesses.innerText = "Game Over!"
-}
-
-function checkLetter() {
-    // if the user input matches a letter in the secret word
-    if (secretWord.includes(userInput)) {
-        //add the users input to the mystery word area
-        mysteryWord.append(userInput);
-    } else {
-        userGuessArray.push(userInput);
-        userGuesses.innerText = userGuessArray;
-        guessesLeft--;
-        updateScore();
-    }
-}
+// function checkLetter() {
+//     // if the user input matches a letter in the secret word
+//     if (secretWord.includes(userInput)) {
+//         //add the users input to the mystery word area
+//         mysteryWord.append(userInput);
+//     } else {
+//         userGuessArray.push(userInput);
+//         userGuesses.innerText = userGuessArray;
+//         guessesLeft--;
+//         updateScore();
+//     }
+// }
 
 pickSecretWord();
 guessesLeft = secretWord.length;
@@ -53,7 +55,9 @@ document.onkeyup = function (event) {
     if (alphabet.includes(userInput)) {
         //if the guessesLeft are above 0 this code will run
         if (guessesLeft > 0) {
-            checkLetter();
+            recordGuess();
+            // checkLetter();
+            // checkDuplicate();
         } else { }
     } else {
         console.log(userInput + " IS A WRONG INPUT!")
