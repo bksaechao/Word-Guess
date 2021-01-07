@@ -4,12 +4,12 @@ var remainingGuesses = document.getElementById("remaining-guesses");
 var secretWordArray = ["BLEACH", "NARUTO", "SUNSHINE", "NOBLESSE", "GENSHIN IMPACT"]
 var userGuessArray = [];
 var alphabet = "abcdefghijklmnopqrstuvwxyz".toUpperCase();
-var secretWord 
+var secretWord
 
 let guessesLeft = 0
 
-function pickWord() {
-    var randomWord = secretWordArray[Math.floor(Math.random()*secretWordArray.length)]
+function pickSecretWord() {
+    var randomWord = secretWordArray[Math.floor(Math.random() * secretWordArray.length)]
     secretWord = randomWord
     console.log(secretWord);
 }
@@ -21,32 +21,40 @@ function recordGuess() {
 
 function updateScore() {
     remainingGuesses.innerText = guessesLeft;
+    if (guessesLeft === 0) {
+        gameOver();
+    }
 }
 
 function gameOver() {
     remainingGuesses.innerText = "Game Over!"
 }
 
-function addCorrectLetter() {
-        if (secretWord.includes(userInput)) {
-            mysteryWord.append(userInput);
-        }
+function checkLetter() {
+    // if the user input matches a letter in the secret word
+    if (secretWord.includes(userInput)) {
+        //add the users input to the mystery word area
+        mysteryWord.append(userInput);
+    } else {
+        userGuessArray.push(userInput);
+        userGuesses.innerText = userGuessArray;
+        guessesLeft--;
+        updateScore();
+    }
 }
 
-pickWord();
-document.onkeyup = function (event) {
-    guessesLeft = secretWord.length;
-    updateScore();
-    userInput = event.key.toUpperCase();
+pickSecretWord();
+guessesLeft = secretWord.length;
+updateScore();
 
+document.onkeyup = function (event) {
+    userInput = event.key.toUpperCase();
+    // checks if a letter is picked
     if (alphabet.includes(userInput)) {
+        //if the guessesLeft are above 0 this code will run
         if (guessesLeft > 0) {
-            addCorrectLetter();
-            recordGuess();
-        } else {
-            guessesLeft--;
-            updateScore();
-        }
+            checkLetter();
+        } else { }
     } else {
         console.log(userInput + " IS A WRONG INPUT!")
     }
