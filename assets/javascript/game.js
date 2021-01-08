@@ -1,7 +1,7 @@
 var mysteryWord = document.getElementById("mystery-word");
 var userGuesses = document.getElementById("user-guesses");
 var remainingGuesses = document.getElementById("remaining-guesses");
-var secretWordArray = ["BLEACH", "NARUTO", "SUNSHINE", "NOBLESSE", "GENSHIN-IMPACT"]
+var secretWordArray = ["BLEACH", "NARUTO", "SUNSHINE", "NOBLESSE", "GENSHIN IMPACT", "APPLE WORD"]
 var userGuessArray = [];
 var correctGuessArray = [];
 var alphabet = "abcdefghijklmnopqrstuvwxyz".toUpperCase();
@@ -15,6 +15,29 @@ function pickSecretWord() {
     console.log(secretWord);
 }
 
+function handleSecretWord() {
+    hiddenWord = secretWord.split('').map(
+        function (letter) {
+            if (correctGuessArray.indexOf(letter) > -1) {
+                return letter
+            } else if (letter === " ") {
+                return '\xa0'
+            } else {
+                return " _ "
+            }
+        }).join('');
+    mysteryWord.innerText = hiddenWord;
+}
+
+function handleGuess() {
+    guesses = userGuessArray.map(
+        function (letter) {
+            return letter
+        }
+    ).join(' ');
+    userGuesses.innerText = guesses;
+}
+
 function updateScore() {
     guessesLeft = secretWord.length;
     remainingGuesses.innerText = "Guesses Left: " + guessesLeft;
@@ -23,18 +46,6 @@ function updateScore() {
     }
 }
 
-function handleSecretWord() {
-    hiddenWord = secretWord.split('').map(
-        function (letter) {
-            if (correctGuessArray.indexOf(letter) > -1) {
-                return letter
-        } else {
-            return " _ "
-        }
-    }).join('');
-
-    mysteryWord.innerText = hiddenWord;
-}
 
 
 pickSecretWord();
@@ -47,7 +58,7 @@ document.onkeyup = function (event) {
     if (alphabet.includes(userInput)) {
         if (userGuessArray.indexOf(userInput) === -1 && secretWord.indexOf(userInput) === -1) {
             userGuessArray.push(userInput);
-            userGuesses.innerText = userGuessArray;
+            handleGuess();
             guessesLeft--;
             updateScore();
         }
