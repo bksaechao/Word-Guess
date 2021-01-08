@@ -9,6 +9,7 @@ var secretWord
 
 let guessesLeft = 0
 
+
 function pickSecretWord() {
     var randomWord = secretWordArray[Math.floor(Math.random() * secretWordArray.length)]
     secretWord = randomWord
@@ -27,6 +28,7 @@ function handleSecretWord() {
             }
         }).join('');
     mysteryWord.innerText = hiddenWord;
+    guessesLeft = secretWord.length;
 }
 
 function handleGuess() {
@@ -38,8 +40,16 @@ function handleGuess() {
     userGuesses.innerText = guesses;
 }
 
+function pushCorrectGuess() {
+    correctGuessArray.push(userInput);
+}
+
+function pushIncorrectGuess() {
+    userGuessArray.push(userInput);
+}
+
+
 function updateScore() {
-    guessesLeft = secretWord.length;
     remainingGuesses.innerText = "Guesses Left: " + guessesLeft;
     if (guessesLeft === 0) {
         remainingGuesses.innerText = "Game Over!"
@@ -52,18 +62,19 @@ pickSecretWord();
 handleSecretWord();
 updateScore();
 
+
 document.onkeyup = function (event) {
     userInput = event.key.toUpperCase();
     // checks if a letter is picked
     if (alphabet.includes(userInput)) {
         if (userGuessArray.indexOf(userInput) === -1 && secretWord.indexOf(userInput) === -1) {
-            userGuessArray.push(userInput);
+            pushIncorrectGuess();
             handleGuess();
             guessesLeft--;
             updateScore();
         }
         else if (correctGuessArray.indexOf(userInput) === -1 && secretWord.indexOf(userInput) > -1) {
-            correctGuessArray.push(userInput);
+            pushCorrectGuess();
             handleSecretWord();
         } else {
             console.log("YOU ALREADY TRIED THAT")
