@@ -3,6 +3,7 @@ var userGuesses = document.getElementById("user-guesses");
 var remainingGuesses = document.getElementById("remaining-guesses");
 var secretWordArray = ["BLEACH", "NARUTO", "SUNSHINE", "NOBLESSE", "GENSHIN IMPACT"]
 var userGuessArray = [];
+var correctGuessArray = [];
 var alphabet = "abcdefghijklmnopqrstuvwxyz".toUpperCase();
 var secretWord
 
@@ -14,57 +15,58 @@ function pickSecretWord() {
     console.log(secretWord);
 }
 
-function checkGuess() {
-    if (userGuessArray.indexOf(userInput) === -1 && mysteryWord.innerText.indexOf(userInput) === -1) {
-        if (secretWord.includes(userInput)){
-            mysteryWord.append(userInput);
-            console.log(mysteryWord);
-        } else {
-            userGuessArray.push(userInput);
-            userGuesses.innerText = userGuessArray;
-        }
-    } else {
-        console.log("YOU ALREADY PICKED THAT LETTER")
-    }
-}
-
 function updateScore() {
+    guessesLeft = secretWord.length;
     remainingGuesses.innerText = "Guesses Left: " + guessesLeft;
     if (guessesLeft === 0) {
         remainingGuesses.innerText = "Game Over!"
     }
 }
 
+function renderSecretWord() {
+    hiddenWord = secretWord.split('').map(
+        function (letter) {
+            if (correctGuessArray.indexOf(letter) > -1) {
+                return letter
+        } else {
+            return " _ "
+        }
+    }).join('');
 
+    mysteryWord.innerText = hiddenWord;
+}
 
-// function checkLetter() {
-//     // if the user input matches a letter in the secret word
-//     if (secretWord.includes(userInput)) {
-//         //add the users input to the mystery word area
-//         mysteryWord.append(userInput);
-//     } else {
-//         userGuessArray.push(userInput);
-//         userGuesses.innerText = userGuessArray;
-//         guessesLeft--;
-//         updateScore();
-//     }
-// }
+function updateSecretWord() {
+    for (let i = 0; i < secretWord.length; i++) {
+        if (userInput !== secretWord[i]) {
+
+        }
+        
+    }
+}
+
 
 pickSecretWord();
-guessesLeft = secretWord.length;
+renderSecretWord();
 updateScore();
 
 document.onkeyup = function (event) {
     userInput = event.key.toUpperCase();
     // checks if a letter is picked
     if (alphabet.includes(userInput)) {
-        //if the guessesLeft are above 0 this code will run
-        if (guessesLeft > 0) {
-            checkGuess();
-            // checkLetter();
-            // checkDuplicate();
-        } else { }
+        if (userGuessArray.indexOf(userInput) === -1 && secretWord.indexOf(userInput) === -1) {
+            userGuessArray.push(userInput);
+            userGuesses.innerText = userGuessArray;
+            guessesLeft--;
+            updateScore();
+        }
+        else if (correctGuessArray.indexOf(userInput) === -1 && secretWord.indexOf(userInput) > -1) {
+            correctGuessArray.push(userInput);
+            renderSecretWord();
+        } else {
+            console.log("YOU ALREADY TRIED THAT")
+        }
     } else {
-        console.log(userInput + " IS A WRONG INPUT!")
+        console.log(userInput + " IS AN INVALID INPUT!")
     }
 }
