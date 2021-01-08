@@ -1,7 +1,7 @@
 var mysteryWord = document.getElementById("mystery-word");
 var userGuesses = document.getElementById("user-guesses");
 var remainingGuesses = document.getElementById("remaining-guesses");
-var secretWordArray = ["BLEACH", "NARUTO", "SUNSHINE", "NOBLESSE", "GENSHIN IMPACT"]
+var secretWordArray = ["BLEACH", "NARUTO", "SUNSHINE", "NOBLESSE", "GENSHIN-IMPACT"]
 var userGuessArray = [];
 var correctGuessArray = [];
 var alphabet = "abcdefghijklmnopqrstuvwxyz".toUpperCase();
@@ -23,7 +23,7 @@ function updateScore() {
     }
 }
 
-function renderSecretWord() {
+function handleSecretWord() {
     hiddenWord = secretWord.split('').map(
         function (letter) {
             if (correctGuessArray.indexOf(letter) > -1) {
@@ -36,18 +36,9 @@ function renderSecretWord() {
     mysteryWord.innerText = hiddenWord;
 }
 
-function updateSecretWord() {
-    for (let i = 0; i < secretWord.length; i++) {
-        if (userInput !== secretWord[i]) {
-
-        }
-        
-    }
-}
-
 
 pickSecretWord();
-renderSecretWord();
+handleSecretWord();
 updateScore();
 
 document.onkeyup = function (event) {
@@ -62,7 +53,7 @@ document.onkeyup = function (event) {
         }
         else if (correctGuessArray.indexOf(userInput) === -1 && secretWord.indexOf(userInput) > -1) {
             correctGuessArray.push(userInput);
-            renderSecretWord();
+            handleSecretWord();
         } else {
             console.log("YOU ALREADY TRIED THAT")
         }
