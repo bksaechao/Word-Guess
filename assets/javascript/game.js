@@ -13,11 +13,6 @@ let guessesLeft = 0
 let wins = 0
 let loss = 0
 
-userWins.innerText = "Wins: " + wins;
-userLoss.innerText = "Loss: " + loss;
-
-
-
 function pickSecretWord() {
     var randomWord = secretWordArray[Math.floor(Math.random() * secretWordArray.length)]
     secretWord = randomWord
@@ -83,26 +78,39 @@ function newWord() {
 }
 
 function updateRemainingGuesses() {
+    guessesLeft--;
     remainingGuesses.innerText = "Guesses Left: " + guessesLeft;
 }
 
+function gameStart() {
+    remainingGuesses.innerText = "Guesses Left: " + guessesLeft;
+    userWins.innerText = "Wins: " + wins;
+    userLoss.innerText = "Loss: " + loss;
+}
 
-
-
+function resetScore() {
+    var btn = document.getElementById('btn');
+    btn.onclick = function () {
+        wins = 0
+        loss = 0
+        userWins.innerText = "Wins: " + wins;
+        userLoss.innerText = "Loss: " + loss;
+        newWord();
+    }
+}
+resetScore();
 pickSecretWord();
 handleSecretWord();
 guessesLeft = secretWord.length;
-updateRemainingGuesses();
-
 
 document.onkeyup = function (event) {
+    gameStart();
     userInput = event.key.toUpperCase();
     // checks if a letter is picked
     if (alphabet.includes(userInput)) {
         if (userGuessArray.indexOf(userInput) === -1 && secretWord.indexOf(userInput) === -1 && guessesLeft >= 1) {
             pushIncorrectGuess();
             handleGuess();
-            guessesLeft--;
             updateRemainingGuesses();
             checkLoss();
         }
@@ -111,7 +119,9 @@ document.onkeyup = function (event) {
             handleSecretWord();
             checkWin();
         } else {
-            console.log("YOU ALREADY TRIED THAT")
+            setTimeout(function () {
+                console.log("YOU ALREADY TRIED THAT")
+            })
         }
     } else {
         console.log(userInput + " IS AN INVALID INPUT!")
