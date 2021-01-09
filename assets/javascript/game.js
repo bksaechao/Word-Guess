@@ -1,6 +1,8 @@
 var mysteryWord = document.getElementById("mystery-word");
 var userGuesses = document.getElementById("user-guesses");
 var remainingGuesses = document.getElementById("remaining-guesses");
+var userWins = document.getElementById("wins");
+var userLoss = document.getElementById("loss");
 var secretWordArray = ["BLEACH", "NARUTO", "SUNSHINE", "NOBLESSE", "GENSHIN IMPACT", "APPLE WORD"]
 var userGuessArray = [];
 var correctGuessArray = [];
@@ -8,6 +10,12 @@ var alphabet = "abcdefghijklmnopqrstuvwxyz".toUpperCase();
 var secretWord
 
 let guessesLeft = 0
+let wins = 0
+let loss = 0
+
+userWins.innerText = "Wins: " + wins;
+userLoss.innerText = "Loss: " + loss;
+
 
 
 function pickSecretWord() {
@@ -28,7 +36,6 @@ function handleSecretWord() {
             }
         }).join('');
     mysteryWord.innerText = hiddenWord;
-    guessesLeft = secretWord.length;
 }
 
 function handleGuess() {
@@ -48,18 +55,31 @@ function pushIncorrectGuess() {
     userGuessArray.push(userInput);
 }
 
+function checkWin() {
+    if (mysteryWord.innerText.includes("_")) { }
+    else {
+        mysteryWord.innerText = "YOU WIN!"
+    }
+}
 
-function updateScore() {
-    remainingGuesses.innerText = "Guesses Left: " + guessesLeft;
+function checkLoss() {
     if (guessesLeft === 0) {
         remainingGuesses.innerText = "Game Over!"
     }
 }
 
+function newWord() { }
+
+function updateScore() {
+    remainingGuesses.innerText = "Guesses Left: " + guessesLeft;
+}
+
+
 
 
 pickSecretWord();
 handleSecretWord();
+guessesLeft = secretWord.length;
 updateScore();
 
 
@@ -67,15 +87,17 @@ document.onkeyup = function (event) {
     userInput = event.key.toUpperCase();
     // checks if a letter is picked
     if (alphabet.includes(userInput)) {
-        if (userGuessArray.indexOf(userInput) === -1 && secretWord.indexOf(userInput) === -1) {
+        if (userGuessArray.indexOf(userInput) === -1 && secretWord.indexOf(userInput) === -1 && guessesLeft >= 1) {
             pushIncorrectGuess();
             handleGuess();
             guessesLeft--;
             updateScore();
+            checkLoss();
         }
         else if (correctGuessArray.indexOf(userInput) === -1 && secretWord.indexOf(userInput) > -1) {
             pushCorrectGuess();
             handleSecretWord();
+            checkWin();
         } else {
             console.log("YOU ALREADY TRIED THAT")
         }
