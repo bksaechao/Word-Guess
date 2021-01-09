@@ -1,28 +1,62 @@
 var mysteryWord = document.getElementById("mystery-word");
 var userGuesses = document.getElementById("user-guesses");
 var remainingGuesses = document.getElementById("remaining-guesses");
+var audioSrc = document.getElementById("audio-source");
 var btn = document.getElementById('btn');
 var userWins = document.getElementById("wins");
 var userLoss = document.getElementById("loss");
-var secretWordArray = ["BLEACH", "NARUTO", "SUNSHINE", "NOBLESSE", "GENSHIN IMPACT", "APPLE WORD"]
 var userGuessArray = [];
 var correctGuessArray = [];
 var alphabet = "abcdefghijklmnopqrstuvwxyz".toUpperCase();
 var secretWord
+var audio
+var image = document.getElementById("genshin-image");
 
 let guessesLeft = 0
 let wins = 0
 let loss = 0
 
+var secretWordObjArr = [
+    {
+        word: "BLEACH",
+        song: "assets/audio/blackClover.mp3",
+        image: ""
+    },
+    {
+        word: "NARUTO",
+        song: "assets/audio/genshinImpact.mp3",
+        image: ""
+    },
+    {
+        word: "SUNSHINE",
+        song: "assets/audio/blackClover.mp3",
+        image: ""
+    },
+    {
+        word: "NOBLESSE",
+        song: "assets/audio/genshinImpact.mp3",
+        image: ""
+    },
+    {
+        word: "GENSHIN IMPACT",
+        song: "assets/audio/genshinImpact.mp3",
+        image: ""
+    },
+    {
+        word: "BLACK CLOVER",
+        song: "assets/audio/blackClover.mp3",
+        image: ""
+    }
+]
+
 function pickSecretWord() {
-    var randomWord = secretWordArray[Math.floor(Math.random() * secretWordArray.length)]
+    var randomWord = secretWordObjArr[Math.floor(Math.random() * secretWordObjArr.length)]
     secretWord = randomWord
-    console.log(secretWord);
+    console.log (secretWord);
 }
 
-
 function handleSecretWord() {
-    hiddenWord = secretWord.split('').map(
+    hiddenWord = secretWord.word.split('').map(
         function (letter) {
             if (correctGuessArray.indexOf(letter) > -1) {
                 return letter
@@ -55,10 +89,19 @@ function pushIncorrectGuess() {
 function checkWin() {
     if (mysteryWord.innerText.includes("_")) { }
     else {
+        getSong();
         newWord();
         wins++
         userWins.innerText = "Wins: " + wins;
-        audio = document.getElementById("audio")
+    }
+}
+
+function getSong() {
+    audio = new Audio(secretWord.song);
+    if (!audio.paused || audio.currentTime > 0) {
+        audio.pause();
+        audio.play();
+    } else {
         audio.play();
     }
 }
@@ -76,7 +119,7 @@ function newWord() {
     correctGuessArray = [];
     userGuesses.innerText = "";
     pickSecretWord();
-    guessesLeft = secretWord.length;
+    guessesLeft = secretWord.word.length;
     updateRemainingGuesses();
     handleSecretWord();
 }
@@ -105,21 +148,20 @@ function resetScore() {
 resetScore();
 pickSecretWord();
 handleSecretWord();
-guessesLeft = secretWord.length;
+guessesLeft = secretWord.word.length;
 
 document.onkeyup = function (event) {
-
     gameStart();
     userInput = event.key.toUpperCase();
     // checks if a letter is picked
     if (alphabet.includes(userInput)) {
-        if (userGuessArray.indexOf(userInput) === -1 && secretWord.indexOf(userInput) === -1 && guessesLeft >= 1) {
+        if (userGuessArray.indexOf(userInput) === -1 && secretWord.word.indexOf(userInput) === -1 && guessesLeft >= 1) {
             pushIncorrectGuess();
             handleGuess();
             updateRemainingGuesses();
             checkLoss();
         }
-        else if (correctGuessArray.indexOf(userInput) === -1 && secretWord.indexOf(userInput) > -1) {
+        else if (correctGuessArray.indexOf(userInput) === -1 && secretWord.word.indexOf(userInput) > -1) {
             pushCorrectGuess();
             handleSecretWord();
             checkWin();
@@ -132,3 +174,4 @@ document.onkeyup = function (event) {
         console.log(userInput + " IS AN INVALID INPUT!")
     }
 }
+
