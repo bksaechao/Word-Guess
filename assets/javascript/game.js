@@ -106,6 +106,7 @@ function getNewSong() {
 
 function updateImg() {
     imgName.innerText = secretWord.word;
+    // imgName.style.display = "block";
     image.src = secretWord.image
     image.style.display = "block";
 }
@@ -151,7 +152,7 @@ function resetScore() {
         userWins.innerText = "Wins: " + wins;
         userLoss.innerText = "Loss: " + loss;
         image.style.display = "none";
-        imgName.innerText = "";
+        imgName.innerText = "Word Guess!";
         audio.pause();
         newWord();
         remainingGuesses.innerText = "Tap any key to start!";

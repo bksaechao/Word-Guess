@@ -6,24 +6,30 @@
     <meta name="viewport" conent="width=device-width, initial-scale=1.0">
     <title>Word Guess</title>
     <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative&family=Concert+One&family=Hachi+Maru+Pop&family=Lobster&family=Orbitron&display=swap"
+        rel="stylesheet">
 </head>
 
 <body>
     <div class="wrapper">
-        <h2>Word Guess!</h2>
+        <!-- <h2>Word Guess!</h2> -->
         <div id="game-div" class="game-content">
+            <h1 id="secret-img-name">Word Guess!</h1>
             <div class="container">
-                <h1 id="wins"></h1>
-                <button id="btn">Reset Score</button>
-                <h1 id="loss"></h1>
+                <h3 id="wins"></h3>
+                <h3 id="loss"></h3>
+                <!-- <button id="btn">Reset Score</button> -->
             </div>
             <div id="image-div" class="word-image">
-                <h2 id="secret-img-name"></h2>
-                <img src="" id="secret-image" alt="secret-word-image" height="300" width="500">
+                <!-- <h2 id="secret-img-name"></h2> -->
+                <img src="" id="secret-image" alt="secret-word-image" height="220" width="420">
             </div>
             <p id="mystery-word"></p>
             <p id="user-guesses"></p>
             <p id="remaining-guesses">Tap any key to start!</p>
+            <button id="btn">Reset Score</button>
         </div>
     </div>
 

@@ -5,6 +5,12 @@ html {
 
 body {
     text-align: center;
+    background-image: url('../images/leaves.png');
+    font-family: 'Cinzel Decorative', cursive;
+    /* font-family: 'Concert One', cursive; */
+    /* font-family: 'Hachi Maru Pop', cursive; */
+    /* font-family: 'Lobster', cursive; */
+    /* font-family: 'Orbitron', sans-serif; */
 }
 
 .wrapper {
@@ -15,22 +21,23 @@ body {
 .container {
     display: flex;
     flex-direction: row;
-    justify-content: center;
+    justify-content: space-evenly;
     margin: 0;
 }
 
 .game-content {
     border: 10px outset rgb(85, 109, 133);
-    padding: 30px;
+    padding: 20px;
+    background: honeydew;
 }
 
 #mystery-word {
-    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    /* font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif; */
     font-weight: 700;
     font-size: 1.562rem;
     border: 2px solid #ddd;
     padding: 20px;
-    color: blueviolet;
+    color: cornflowerblue;
 }
 
 #remaining-guesses {
@@ -43,6 +50,18 @@ body {
     font-size: 1.875rem;
 }
 
+#secret-img-name {
+    font-size: 50px;
+    color: peru;
+    /* border: 5px solid rgb(85, 109, 133); */
+    width: fit-content;
+    margin: 0 auto;
+    padding: 10px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    /* display: none; */
+}
+
 #btn {
     display: none;
     margin: 0px 10px;
@@ -52,4 +71,7 @@ body {
 img {
     display: none;
     margin: 0 auto;
+    padding: 1px;
+    border: 3px solid rgb(85, 109, 133);
+    border-radius: 20px;
 }
