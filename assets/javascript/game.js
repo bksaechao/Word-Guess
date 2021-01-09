@@ -52,7 +52,7 @@ var secretWordObjArr = [
 function pickSecretWord() {
     var randomWord = secretWordObjArr[Math.floor(Math.random() * secretWordObjArr.length)]
     secretWord = randomWord
-    console.log (secretWord);
+    console.log(secretWord);
 }
 
 function handleSecretWord() {
@@ -89,21 +89,21 @@ function pushIncorrectGuess() {
 function checkWin() {
     if (mysteryWord.innerText.includes("_")) { }
     else {
-        getSong();
+        getNewSong();
         newWord();
         wins++
         userWins.innerText = "Wins: " + wins;
     }
 }
 
+function getNewSong() {
+    audio.pause();
+    audio = new Audio(secretWord.song)
+    audio.play();
+}
+
 function getSong() {
     audio = new Audio(secretWord.song);
-    if (!audio.paused || audio.currentTime > 0) {
-        audio.pause();
-        audio.play();
-    } else {
-        audio.play();
-    }
 }
 
 function checkLoss() {
@@ -147,6 +147,7 @@ function resetScore() {
 }
 resetScore();
 pickSecretWord();
+getSong();
 handleSecretWord();
 guessesLeft = secretWord.word.length;
 
