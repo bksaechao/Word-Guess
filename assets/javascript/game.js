@@ -5,12 +5,13 @@ var audioSrc = document.getElementById("audio-source");
 var btn = document.getElementById('btn');
 var userWins = document.getElementById("wins");
 var userLoss = document.getElementById("loss");
+var image = document.getElementById("secret-image");
+var imgName = document.getElementById("secret-img-name");
 var userGuessArray = [];
 var correctGuessArray = [];
 var alphabet = "abcdefghijklmnopqrstuvwxyz".toUpperCase();
 var secretWord
 var audio
-var image = document.getElementById("genshin-image");
 
 let guessesLeft = 0
 let wins = 0
@@ -19,33 +20,33 @@ let loss = 0
 var secretWordObjArr = [
     {
         word: "BLEACH",
-        song: "assets/audio/blackClover.mp3",
-        image: ""
+        song: "assets/audio/bleach.mp3",
+        image: "assets/images/bleach.jpeg"
     },
     {
         word: "NARUTO",
-        song: "assets/audio/genshinImpact.mp3",
-        image: ""
+        song: "assets/audio/shikamaru.mp3",
+        image: "assets/images/naruto.jpg"
     },
     {
         word: "SUNSHINE",
-        song: "assets/audio/blackClover.mp3",
-        image: ""
+        song: "assets/audio/sunshine.mp3",
+        image: "assets/images/mimikyu.png"
     },
     {
         word: "NOBLESSE",
-        song: "assets/audio/genshinImpact.mp3",
-        image: ""
+        song: "assets/audio/noblesse.mp3",
+        image: "assets/images/noblesse.jpg"
     },
     {
         word: "GENSHIN IMPACT",
         song: "assets/audio/genshinImpact.mp3",
-        image: ""
+        image: "assets/images/genshinImpact.jpg"
     },
     {
         word: "BLACK CLOVER",
         song: "assets/audio/blackClover.mp3",
-        image: ""
+        image: "assets/images/blackClover.jpg"
     }
 ]
 
@@ -89,6 +90,7 @@ function pushIncorrectGuess() {
 function checkWin() {
     if (mysteryWord.innerText.includes("_")) { }
     else {
+        updateImg();
         getNewSong();
         newWord();
         wins++
@@ -100,6 +102,12 @@ function getNewSong() {
     audio.pause();
     audio = new Audio(secretWord.song)
     audio.play();
+}
+
+function updateImg() {
+    imgName.innerText = secretWord.word;
+    image.src = secretWord.image
+    image.style.display = "block";
 }
 
 function getSong() {
@@ -142,7 +150,11 @@ function resetScore() {
         loss = 0
         userWins.innerText = "Wins: " + wins;
         userLoss.innerText = "Loss: " + loss;
+        image.style.display = "none";
+        imgName.innerText = "";
+        audio.pause();
         newWord();
+        remainingGuesses.innerText = "Tap any key to start!";
     }
 }
 resetScore();
