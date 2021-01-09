@@ -1,6 +1,7 @@
 var mysteryWord = document.getElementById("mystery-word");
 var userGuesses = document.getElementById("user-guesses");
 var remainingGuesses = document.getElementById("remaining-guesses");
+var btn = document.getElementById('btn');
 var userWins = document.getElementById("wins");
 var userLoss = document.getElementById("loss");
 var secretWordArray = ["BLEACH", "NARUTO", "SUNSHINE", "NOBLESSE", "GENSHIN IMPACT", "APPLE WORD"]
@@ -18,6 +19,7 @@ function pickSecretWord() {
     secretWord = randomWord
     console.log(secretWord);
 }
+
 
 function handleSecretWord() {
     hiddenWord = secretWord.split('').map(
@@ -56,6 +58,8 @@ function checkWin() {
         newWord();
         wins++
         userWins.innerText = "Wins: " + wins;
+        audio = document.getElementById("audio")
+        audio.play();
     }
 }
 
@@ -86,10 +90,10 @@ function gameStart() {
     remainingGuesses.innerText = "Guesses Left: " + guessesLeft;
     userWins.innerText = "Wins: " + wins;
     userLoss.innerText = "Loss: " + loss;
+    btn.style.display = "block";
 }
 
 function resetScore() {
-    var btn = document.getElementById('btn');
     btn.onclick = function () {
         wins = 0
         loss = 0
@@ -104,6 +108,7 @@ handleSecretWord();
 guessesLeft = secretWord.length;
 
 document.onkeyup = function (event) {
+
     gameStart();
     userInput = event.key.toUpperCase();
     // checks if a letter is picked

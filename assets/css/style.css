@@ -28,3 +28,9 @@ body {
 #remaining-guesses {
     font-size: 1.875rem;
 }
+
+#btn {
+    display: none;
+    margin: 0 auto;
+}
+
