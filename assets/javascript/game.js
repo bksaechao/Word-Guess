@@ -58,19 +58,31 @@ function pushIncorrectGuess() {
 function checkWin() {
     if (mysteryWord.innerText.includes("_")) { }
     else {
-        mysteryWord.innerText = "YOU WIN!"
+        newWord();
+        wins++
+        userWins.innerText = "Wins: " + wins;
     }
 }
 
 function checkLoss() {
     if (guessesLeft === 0) {
-        remainingGuesses.innerText = "Game Over!"
+        newWord();
+        loss++
+        userLoss.innerText = "Loss: " + loss;
     }
 }
 
-function newWord() { }
+function newWord() {
+    userGuessArray = [];
+    correctGuessArray = [];
+    userGuesses.innerText = "";
+    pickSecretWord();
+    guessesLeft = secretWord.length;
+    updateRemainingGuesses();
+    handleSecretWord();
+}
 
-function updateScore() {
+function updateRemainingGuesses() {
     remainingGuesses.innerText = "Guesses Left: " + guessesLeft;
 }
 
@@ -80,7 +92,7 @@ function updateScore() {
 pickSecretWord();
 handleSecretWord();
 guessesLeft = secretWord.length;
-updateScore();
+updateRemainingGuesses();
 
 
 document.onkeyup = function (event) {
@@ -91,7 +103,7 @@ document.onkeyup = function (event) {
             pushIncorrectGuess();
             handleGuess();
             guessesLeft--;
-            updateScore();
+            updateRemainingGuesses();
             checkLoss();
         }
         else if (correctGuessArray.indexOf(userInput) === -1 && secretWord.indexOf(userInput) > -1) {
