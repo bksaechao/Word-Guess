@@ -106,7 +106,6 @@ function getNewSong() {
 
 function updateImg() {
     imgName.innerText = secretWord.word;
-    // imgName.style.display = "block";
     image.src = secretWord.image
     image.style.display = "block";
 }
@@ -115,9 +114,17 @@ function getSong() {
     audio = new Audio(secretWord.song);
 }
 
+function loseReset() {
+    audio.pause();
+    imgName.innerText = "Word Guess!";
+    image.style.display = "none";
+}
+
 function checkLoss() {
     if (guessesLeft === 0) {
+        audio.pause()
         newWord();
+        loseReset();
         loss++
         userLoss.innerText = "Loss: " + loss;
     }
@@ -158,6 +165,7 @@ function resetScore() {
         remainingGuesses.innerText = "Tap any key to start!";
     }
 }
+
 resetScore();
 pickSecretWord();
 getSong();
