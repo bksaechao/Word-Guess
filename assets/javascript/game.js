@@ -53,7 +53,7 @@ var secretWordObjArr = [
 function pickSecretWord() {
     var randomWord = secretWordObjArr[Math.floor(Math.random() * secretWordObjArr.length)]
     secretWord = randomWord
-    console.log(secretWord);
+    console.log("Secret Word: " + secretWord.word);
 }
 
 function handleSecretWord() {
@@ -116,7 +116,7 @@ function getSong() {
 
 function loseReset() {
     audio.pause();
-    imgName.innerText = "Word Guess!";
+    imgName.innerText = "Word Guess";
     image.style.display = "none";
 }
 
@@ -135,13 +135,20 @@ function newWord() {
     correctGuessArray = [];
     userGuesses.innerText = "";
     pickSecretWord();
-    guessesLeft = secretWord.word.length;
+    handleGuessesLogic();
     updateRemainingGuesses();
     handleSecretWord();
 }
 
+function handleGuessesLogic() {
+    if (secretWord.word.length > 10) {
+        guessesLeft = 8;
+    } else {
+        guessesLeft = secretWord.word.length - 1;
+    }
+}
+
 function updateRemainingGuesses() {
-    guessesLeft--;
     remainingGuesses.innerText = "Guesses Left: " + guessesLeft;
 }
 
@@ -159,7 +166,7 @@ function resetScore() {
         userWins.innerText = "Wins: " + wins;
         userLoss.innerText = "Loss: " + loss;
         image.style.display = "none";
-        imgName.innerText = "Word Guess!";
+        imgName.innerText = "Word Guess";
         audio.pause();
         newWord();
         remainingGuesses.innerText = "Tap any key to start!";
@@ -170,7 +177,7 @@ resetScore();
 pickSecretWord();
 getSong();
 handleSecretWord();
-guessesLeft = secretWord.word.length;
+handleGuessesLogic();
 
 document.onkeyup = function (event) {
     gameStart();
@@ -180,6 +187,7 @@ document.onkeyup = function (event) {
         if (userGuessArray.indexOf(userInput) === -1 && secretWord.word.indexOf(userInput) === -1 && guessesLeft >= 1) {
             pushIncorrectGuess();
             handleGuess();
+            guessesLeft--;
             updateRemainingGuesses();
             checkLoss();
         }
