@@ -173,6 +173,22 @@ function resetScore() {
     }
 }
 
+function animationTest() {
+    setTimeout(function() {
+        imgName.innerText = ""
+        imgName.style.opacity = 0;
+    }, 2000);
+
+    clearInterval();
+
+    setTimeout(function() {
+        imgName.innerText = "Hello World!"
+        imgName.style.opacity = .5;  
+    }, 2000);
+}
+
+animationTest();
+
 resetScore();
 pickSecretWord();
 getSong();

@@ -55,6 +55,7 @@ body {
     font-size: 40px;
     color: peru;
     margin-bottom: 20px;
+    transition: opacity 3s;
 }
 
 #btn {
