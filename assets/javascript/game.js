@@ -177,7 +177,7 @@ function handleWrongInput() {
     setTimeout(function() {
         userGuesses.innerText = "INVALID INPUT!"
         userGuesses.style.color = "purple";
-        userGuesses.style.opacity = .5;  
+        // userGuesses.style.opacity = .5;  
     });
 }
 
@@ -185,7 +185,7 @@ function handleAlreadyGuessed() {
     setTimeout(function() {
         userGuesses.innerText = "YOU ALREADY TRIED THAT"
         userGuesses.style.color = "purple";
-        userGuesses.style.opacity = .5;  
+        // userGuesses.style.opacity = .5;  
     });
 }
 
@@ -194,7 +194,7 @@ function backToGuesses() {
         userGuesses.style.color = "darkred";
         userGuesses.style.opacity = 1;
         handleGuess();   
-    }, 2000)
+    }, 500)
 }
 
 
