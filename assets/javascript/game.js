@@ -173,21 +173,31 @@ function resetScore() {
     }
 }
 
-function animationTest() {
+function handleWrongInput() {
     setTimeout(function() {
-        imgName.innerText = ""
-        imgName.style.opacity = 0;
-    }, 2000);
-
-    clearInterval();
-
-    setTimeout(function() {
-        imgName.innerText = "Hello World!"
-        imgName.style.opacity = .5;  
-    }, 2000);
+        userGuesses.innerText = "INVALID INPUT!"
+        userGuesses.style.color = "purple";
+        userGuesses.style.opacity = .5;  
+    });
 }
 
-animationTest();
+function handleAlreadyGuessed() {
+    setTimeout(function() {
+        userGuesses.innerText = "YOU ALREADY TRIED THAT"
+        userGuesses.style.color = "purple";
+        userGuesses.style.opacity = .5;  
+    });
+}
+
+function backToGuesses() {
+    setTimeout(function() {
+        userGuesses.style.color = "darkred";
+        userGuesses.style.opacity = 1;
+        handleGuess();   
+    }, 2000)
+}
+
+
 
 resetScore();
 pickSecretWord();
@@ -212,12 +222,12 @@ document.onkeyup = function (event) {
             handleSecretWord();
             checkWin();
         } else {
-            setTimeout(function () {
-                console.log("YOU ALREADY TRIED THAT")
-            })
+            handleAlreadyGuessed();
+            backToGuesses();
         }
     } else {
-        console.log(userInput + " IS AN INVALID INPUT!")
+        handleWrongInput();
+        backToGuesses();
     }
 }
 
