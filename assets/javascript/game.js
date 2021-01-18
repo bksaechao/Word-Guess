@@ -120,8 +120,6 @@ var wordGuess = {
         this.handleGuessesLogic();
         document.getElementById("remaining-guesses").innerText = "Guesses Left: " + this.guessesLeft;
         this.displaySecretWord();
-        console.log("Guessed Words: " + this.userGuessArray + "\n" +
-        "Correct Words: " + this.correctGuessArray)
     },
 
     handleSecretWord: function () {
