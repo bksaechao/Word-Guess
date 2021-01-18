@@ -86,14 +86,14 @@ var wordGuess = {
     checkLetter: function (letter) {
         this.handleCorrectGuess(letter);
         this.handleIncorrectGuess(letter);
+        this.checkWin();
     },
 
     handleCorrectGuess: function (letter) {
         if (this.correctGuessArray.indexOf(letter) === -1 && this.secretWord.word.indexOf(letter) > -1) {
             this.correctGuessArray.push(letter);
             this.handleSecretWord();
-            this.checkWin();
-        } else if(this.correctGuessArray.indexOf(letter) > -1) {
+        } else if (this.correctGuessArray.indexOf(letter) > -1) {
             this.handleAlreadyGuessed();
             this.backToGuesses();
         }
@@ -104,9 +104,9 @@ var wordGuess = {
             this.userGuessArray.push(letter);
             this.updateGuesses();
             this.guessesLeft--;
-            document.getElementById("remaining-guesses").innerText = "Guesses Left: " + this.guessesLeft;
             this.checkLoss();
-        } else if(this.userGuessArray.indexOf(letter) > -1) {
+            document.getElementById("remaining-guesses").innerText = "Guesses Left: " + this.guessesLeft;
+        } else if (this.userGuessArray.indexOf(letter) > -1) {
             this.handleAlreadyGuessed();
             this.backToGuesses();
         }
@@ -120,6 +120,8 @@ var wordGuess = {
         this.handleGuessesLogic();
         document.getElementById("remaining-guesses").innerText = "Guesses Left: " + this.guessesLeft;
         this.displaySecretWord();
+        console.log("Guessed Words: " + this.userGuessArray + "\n" +
+        "Correct Words: " + this.correctGuessArray)
     },
 
     handleSecretWord: function () {
@@ -201,8 +203,8 @@ var wordGuess = {
     handleWrongInput: function () {
         setTimeout(function () {
             document.getElementById("user-guesses").innerText = "INVALID INPUT!"
-            document.getElementById("user-guesses").style.color = "pink"; 
-            document.getElementById("user-guesses").style.opacity = "0.8"; 
+            document.getElementById("user-guesses").style.color = "pink";
+            document.getElementById("user-guesses").style.opacity = "0.8";
         });
     },
 
@@ -210,7 +212,7 @@ var wordGuess = {
         setTimeout(function () {
             document.getElementById("user-guesses").innerText = "YOU ALREADY TRIED THAT"
             document.getElementById("user-guesses").style.color = "pink";
-            document.getElementById("user-guesses").style.opacity = "0.8"; 
+            document.getElementById("user-guesses").style.opacity = "0.8";
         });
     },
 
