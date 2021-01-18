@@ -36,8 +36,9 @@ var wordGuess = {
     alphabet: "abcdefghijklmnopqrstuvwxyz".toUpperCase(),
     userGuessArray: [],
     correctGuessArray: [],
-    secretWord: "",
-    audio: "",
+    letterGuessed: null,
+    secretWord: null,
+    audio: null,
     guessesLeft: 0,
     wins: 0,
     loss: 0,
@@ -45,6 +46,8 @@ var wordGuess = {
     setupGame: function () {
         this.pickSecretWord();
         this.displaySecretWord();
+        this.handleGuessesLogic();
+        this.audio = new Audio(this.secretWord.song);
     },
 
     pickSecretWord: function () {
@@ -63,256 +66,174 @@ var wordGuess = {
                 }
             }).join("");
         document.getElementById("mystery-word").innerText = hiddenWord;
+    },
+
+    handleGuessesLogic: function () {
+        if (this.secretWord.word.length > 10) {
+            this.guessesLeft = 8;
+        } else {
+            this.guessesLeft = this.secretWord.word.length - 1;
+        }
+    },
+
+    displayGame: function () {
+        document.getElementById("remaining-guesses").innerText = "Guesses Left: " + this.guessesLeft;
+        document.getElementById("wins").innerText = "Wins: " + this.wins;
+        document.getElementById("loss").innerText = "Loss: " + this.loss;
+        document.getElementById('btn').style.display = "block";
+    },
+
+    checkLetter: function (letter) {
+        this.handleCorrectGuess(letter);
+        this.handleIncorrectGuess(letter);
+    },
+
+    handleCorrectGuess: function (letter) {
+        if (this.correctGuessArray.indexOf(letter) === -1 && this.secretWord.word.indexOf(letter) > -1) {
+            this.correctGuessArray.push(letter);
+            this.handleSecretWord();
+            this.checkWin();
+        } else if(this.correctGuessArray.indexOf(letter) > -1) {
+            this.handleAlreadyGuessed();
+            this.backToGuesses();
+        }
+    },
+
+    handleIncorrectGuess: function (letter) {
+        if (this.userGuessArray.indexOf(letter) === -1 && this.secretWord.word.indexOf(letter) === -1 && this.guessesLeft >= 1) {
+            this.userGuessArray.push(letter);
+            this.updateGuesses();
+            this.guessesLeft--;
+            document.getElementById("remaining-guesses").innerText = "Guesses Left: " + this.guessesLeft;
+            this.checkLoss();
+        } else if(this.userGuessArray.indexOf(letter) > -1) {
+            this.handleAlreadyGuessed();
+            this.backToGuesses();
+        }
+    },
+
+    newWord: function () {
+        this.userGuessArray = [];
+        this.correctGuessArray = [];
+        document.getElementById("user-guesses").innerText = "";
+        this.pickSecretWord();
+        this.handleGuessesLogic();
+        document.getElementById("remaining-guesses").innerText = "Guesses Left: " + this.guessesLeft;
+        this.displaySecretWord();
+    },
+
+    handleSecretWord: function () {
+        var hiddenWord = this.secretWord.word.split('').map(
+            function (letter) {
+                if (wordGuess.correctGuessArray.indexOf(letter) > -1) {
+                    return letter
+                } else if (letter === " ") {
+                    return '\xa0'
+                } else {
+                    return " _ "
+                }
+            }).join('');
+        document.getElementById("mystery-word").innerText = hiddenWord;
+    },
+
+    updateGuesses: function () {
+        var guesses = this.userGuessArray.map(
+            function (letter) {
+                return letter
+            }
+        ).join(' ');
+        document.getElementById("user-guesses").innerText = guesses;
+    },
+
+    checkWin: function () {
+        if (document.getElementById("mystery-word").innerText.includes("_")) { }
+        else {
+            this.updateImg();
+            this.getNewSong();
+            this.newWord();
+            this.wins++
+            document.getElementById("wins").innerText = "Wins: " + this.wins;
+        }
+    },
+
+    checkLoss: function () {
+        if (this.guessesLeft === 0) {
+            this.audio.pause()
+            this.newWord();
+            this.loseReset();
+            this.loss++
+            document.getElementById("loss").innerText = "Loss: " + this.loss;
+        }
+    },
+
+    getNewSong: function () {
+        this.audio.pause();
+        this.audio = new Audio(this.secretWord.song)
+        this.audio.play();
+    },
+
+    updateImg: function () {
+        document.getElementById("secret-img-name").innerText = this.secretWord.word;
+        document.getElementById("secret-image").src = this.secretWord.image
+        document.getElementById("secret-image").style.display = "block";
+    },
+
+    loseReset: function () {
+        this.audio.pause();
+        document.getElementById("secret-img-name").innerText = "Word Guess";
+        document.getElementById("secret-image").style.display = "none";
+    },
+
+    resetScore: function () {
+        document.getElementById('btn').onclick = function () {
+            this.wins = 0
+            this.loss = 0
+            document.getElementById("wins").innerText = "Wins: " + this.wins;
+            document.getElementById("loss").innerText = "Loss: " + this.loss;
+            document.getElementById("secret-image").style.display = "none";
+            document.getElementById("secret-img-name").innerText = "Word Guess";
+            wordGuess.audio.pause();
+            wordGuess.newWord();
+            document.getElementById("remaining-guesses").innerText = "Tap any key to start!";
+        }
+    },
+
+    handleWrongInput: function () {
+        setTimeout(function () {
+            document.getElementById("user-guesses").innerText = "INVALID INPUT!"
+            document.getElementById("user-guesses").style.color = "pink"; 
+            document.getElementById("user-guesses").style.opacity = "0.8"; 
+        });
+    },
+
+    handleAlreadyGuessed: function () {
+        setTimeout(function () {
+            document.getElementById("user-guesses").innerText = "YOU ALREADY TRIED THAT"
+            document.getElementById("user-guesses").style.color = "pink";
+            document.getElementById("user-guesses").style.opacity = "0.8"; 
+        });
+    },
+
+    backToGuesses: function () {
+        setTimeout(function () {
+            document.getElementById("user-guesses").style.color = "darkred";
+            wordGuess.updateGuesses();
+        }, 500)
     }
-    // function handleSecretWord() {
-    //     hiddenWord = secretWord.word.split('').map(
-    //         function (letter) {
-    //             if (correctGuessArray.indexOf(letter) > -1) {
-    //                 return letter
-    //             } else if (letter === " ") {
-    //                 return '\xa0'
-    //             } else {
-    //                 return " _ "
-    //             }
-    //         }).join('');
-    //     mysteryWord.innerText = hiddenWord;
-    // }
 }
 
 wordGuess.setupGame();
-
-// var mysteryWord = document.getElementById("mystery-word");
-// var userGuesses = document.getElementById("user-guesses");
-// var remainingGuesses = document.getElementById("remaining-guesses");
-// var audioSrc = document.getElementById("audio-source");
-// var btn = document.getElementById('btn');
-// var userWins = document.getElementById("wins");
-// var userLoss = document.getElementById("loss");
-// var image = document.getElementById("secret-image");
-// var imgName = document.getElementById("secret-img-name");
-// var userGuessArray = [];
-// var correctGuessArray = [];
-// var alphabet = "abcdefghijklmnopqrstuvwxyz".toUpperCase();
-// var secretWord
-// var audio
-
-// let guessesLeft = 0
-// let wins = 0
-// let loss = 0
-
-// var allSecretWords = [
-//     {
-//         word: "BLEACH",
-//         song: "assets/audio/bleach.mp3",
-//         image: "assets/images/bleach.jpeg"
-//     },
-//     {
-//         word: "NARUTO",
-//         song: "assets/audio/shikamaru.mp3",
-//         image: "assets/images/naruto.jpg"
-//     },
-//     {
-//         word: "SUNSHINE",
-//         song: "assets/audio/sunshine.mp3",
-//         image: "assets/images/mimikyu.png"
-//     },
-//     {
-//         word: "NOBLESSE",
-//         song: "assets/audio/noblesse.mp3",
-//         image: "assets/images/noblesse.jpg"
-//     },
-//     {
-//         word: "GENSHIN IMPACT",
-//         song: "assets/audio/genshinImpact.mp3",
-//         image: "assets/images/genshinImpact.jpg"
-//     },
-//     {
-//         word: "BLACK CLOVER",
-//         song: "assets/audio/blackClover.mp3",
-//         image: "assets/images/blackClover.jpg"
-//     }
-// ]
-
-
-
-// function pickSecretWord() {
-//     var randomWord = allSecretWords[Math.floor(Math.random() * allSecretWords.length)]
-//     secretWord = randomWord
-//     console.log("Secret Word: " + secretWord.word);
-// }
-
-// function handleSecretWord() {
-//     hiddenWord = secretWord.word.split('').map(
-//         function (letter) {
-//             if (correctGuessArray.indexOf(letter) > -1) {
-//                 return letter
-//             } else if (letter === " ") {
-//                 return '\xa0'
-//             } else {
-//                 return " _ "
-//             }
-//         }).join('');
-//     mysteryWord.innerText = hiddenWord;
-// }
-
-// function handleGuess() {
-//     guesses = userGuessArray.map(
-//         function (letter) {
-//             return letter
-//         }
-//     ).join(' ');
-//     userGuesses.innerText = guesses;
-// }
-
-// function pushCorrectGuess() {
-//     correctGuessArray.push(userInput);
-// }
-
-// function pushIncorrectGuess() {
-//     userGuessArray.push(userInput);
-// }
-
-// function checkWin() {
-//     if (mysteryWord.innerText.includes("_")) { }
-//     else {
-//         updateImg();
-//         getNewSong();
-//         newWord();
-//         wins++
-//         userWins.innerText = "Wins: " + wins;
-//     }
-// }
-
-// function getNewSong() {
-//     audio.pause();
-//     audio = new Audio(secretWord.song)
-//     audio.play();
-// }
-
-// function updateImg() {
-//     imgName.innerText = secretWord.word;
-//     image.src = secretWord.image
-//     image.style.display = "block";
-// }
-
-// function getSong() {
-//     audio = new Audio(secretWord.song);
-// }
-
-// function loseReset() {
-//     audio.pause();
-//     imgName.innerText = "Word Guess";
-//     image.style.display = "none";
-// }
-
-// function checkLoss() {
-//     if (guessesLeft === 0) {
-//         audio.pause()
-//         newWord();
-//         loseReset();
-//         loss++
-//         userLoss.innerText = "Loss: " + loss;
-//     }
-// }
-
-// function newWord() {
-//     userGuessArray = [];
-//     correctGuessArray = [];
-//     userGuesses.innerText = "";
-//     pickSecretWord();
-//     handleGuessesLogic();
-//     updateRemainingGuesses();
-//     handleSecretWord();
-// }
-
-// function handleGuessesLogic() {
-//     if (secretWord.word.length > 10) {
-//         guessesLeft = 8;
-//     } else {
-//         guessesLeft = secretWord.word.length - 1;
-//     }
-// }
-
-// function updateRemainingGuesses() {
-//     remainingGuesses.innerText = "Guesses Left: " + guessesLeft;
-// }
-
-// function gameStart() {
-//     remainingGuesses.innerText = "Guesses Left: " + guessesLeft;
-//     userWins.innerText = "Wins: " + wins;
-//     userLoss.innerText = "Loss: " + loss;
-//     btn.style.display = "block";
-// }
-
-// function resetScore() {
-//     btn.onclick = function () {
-//         wins = 0
-//         loss = 0
-//         userWins.innerText = "Wins: " + wins;
-//         userLoss.innerText = "Loss: " + loss;
-//         image.style.display = "none";
-//         imgName.innerText = "Word Guess";
-//         audio.pause();
-//         newWord();
-//         remainingGuesses.innerText = "Tap any key to start!";
-//     }
-// }
-
-// function handleWrongInput() {
-//     setTimeout(function () {
-//         userGuesses.innerText = "INVALID INPUT!"
-//         userGuesses.style.color = "pink";
-//         // userGuesses.style.opacity = .5;  
-//     });
-// }
-
-// function handleAlreadyGuessed() {
-//     setTimeout(function () {
-//         userGuesses.innerText = "YOU ALREADY TRIED THAT"
-//         userGuesses.style.color = "pink";
-//         // userGuesses.style.opacity = .5;  
-//     });
-// }
-
-// function backToGuesses() {
-//     setTimeout(function () {
-//         userGuesses.style.color = "darkred";
-//         userGuesses.style.opacity = 1;
-//         handleGuess();
-//     }, 500)
-// }
-
-
-
-// resetScore();
-// pickSecretWord();
-// getSong();
-// handleSecretWord();
-// handleGuessesLogic();
+wordGuess.resetScore();
 
 document.onkeyup = function (event) {
-    gameStart();
+    wordGuess.displayGame();
     userInput = event.key.toUpperCase();
-    // checks if a letter is picked
-    if (alphabet.includes(userInput)) {
-        if (userGuessArray.indexOf(userInput) === -1 && secretWord.word.indexOf(userInput) === -1 && guessesLeft >= 1) {
-            pushIncorrectGuess();
-            handleGuess();
-            guessesLeft--;
-            updateRemainingGuesses();
-            checkLoss();
-        }
-        else if (correctGuessArray.indexOf(userInput) === -1 && secretWord.word.indexOf(userInput) > -1) {
-            pushCorrectGuess();
-            handleSecretWord();
-            checkWin();
-        } else {
-            handleAlreadyGuessed();
-            backToGuesses();
-        }
+    if (wordGuess.alphabet.includes(userInput)) {
+        wordGuess.letterGuessed = userInput
+        wordGuess.checkLetter(wordGuess.letterGuessed);
     } else {
-        handleWrongInput();
-        backToGuesses();
+        wordGuess.handleWrongInput();
+        wordGuess.backToGuesses();
     }
 }
 
