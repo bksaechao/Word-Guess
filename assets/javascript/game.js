@@ -199,11 +199,9 @@ var wordGuess = {
     },
 
     handleWrongInput: function () {
-        setTimeout(function () {
-            document.getElementById("user-guesses").innerText = "INVALID INPUT!"
-            document.getElementById("user-guesses").style.color = "pink";
-            document.getElementById("user-guesses").style.opacity = "0.8";
-        });
+        document.getElementById("user-guesses").innerText = "INVALID INPUT!"
+        document.getElementById("user-guesses").style.color = "pink";
+        document.getElementById("user-guesses").style.opacity = "0.8";
     },
 
     handleAlreadyGuessed: function () {
